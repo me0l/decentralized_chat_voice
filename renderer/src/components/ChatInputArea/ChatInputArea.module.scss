@@ -1,0 +1,40 @@
+.chat_input_area {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  position: relative;
+  justify-content: center;
+  background-color: #2a223e;
+
+  //& * {
+  //  width: 25%;
+  //}
+
+  & &__button {
+    width: 25px;
+    height: 25px;
+  }
+
+  & &__input {
+    color: white;
+    min-height: 10px;
+    max-height: 200px;
+    width: 100%;
+    float: left;
+    padding: 10px;
+    overflow: auto;
+    outline: 0;
+
+    &::-webkit-scrollbar {
+      width: 0;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+  }
+}

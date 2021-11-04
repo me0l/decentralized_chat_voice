@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="notification_container" style="width:100%;height: 100%;display: flex; flex-direction: column-reverse; gap: 10px">
+<!--        <div style="width: 100%;height:80px; background-color: black">123</div>-->
+<!--        <div style="width: 100%;height:80px; background-color: black">123</div>-->
+<!--        <div style="width: 100%;height:80px; background-color: black">123</div>-->
+<!--        <div style="width: 100%;height:80px; background-color: black">123</div>-->
+<!--        <div style="width: 100%;height:80px; background-color: black">123</div>-->
+    </div>
+    <script>
+        const {ipcRenderer} = require("electron");
+        const $container = document.getElementById("notification_container");
+        let count;
+        function createNotification(icon, title, message) {
+            count = count + 1;
+            const notification = document.createElement("div");
+            notification.style.cssText = `
+                width: 100%;
+                height: 80px;
+                background-color: black;
+            `;
+
+            notification.textContent = message;
+
+            $container.appendChild(notification);
+
+            return () => {
+                $container.removeChild(notification);
+
+                if(!$container.childElementCount) {
+                    ipcRenderer.send("notification_empty");
+                }
+            };
+        }
+
+        ipcRenderer.on("new_notification", (event, args) => {
+            console.log(event,args);
+            const clear = createNotification("dsad", ...args);
+            setTimeout(clear, 5000);
+        });
+    </script>
+</body>
+</html>

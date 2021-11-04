@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "module": "commonjs",
+    "target": "es5",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "lib": [
+      "DOM"
+    ],
+
+    "jsx": "react"
+  },
+  "exclude": [
+    "../node_modules"
+  ]
+}
