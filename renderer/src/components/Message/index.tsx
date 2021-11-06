@@ -2,15 +2,20 @@ import React from "react";
 import { observer } from "mobx-react";
 
 import classes from "./Message.module.scss";
+import { IMessage } from "../../types/message";
 
-function MessageWithoutObserve(props: { text: string; peerId: string }) {
+function MessageWithoutObserve({ message }: { message: IMessage }) {
+  const time = new Date(message.time);
   return (
     <div
+      data-time={`${time.getHours()}:${time.getMinutes()}`}
       className={
-        classes.message + " " + (props.peerId !== "" ? classes.message__me : "")
+        classes.message +
+        " " +
+        (message.from.peerId !== "" ? classes.message__me : "")
       }
     >
-      {props.text}
+      {message.text}
     </div>
   );
 }

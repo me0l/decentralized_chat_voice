@@ -1,20 +1,64 @@
 .message {
   padding: 10px;
-  max-width: 400px;
+  max-width: 300px;
   min-width: 100px;
+  line-height: 20px;
   float: left;
+  position: relative;
+  font-size: 13px;
+  overflow-wrap: break-word;
+  word-break: break-all;
   white-space:pre-wrap;
   background-color: #3c3058;
   align-self: flex-start;
   border-radius: 10px;
   color: white;
+  box-shadow: -1px 0px 6px 0px rgba(0,0,0,0.15);
+  -webkit-box-shadow: -1px 0px 6px 0px rgba(0,0,0,0.15);
+  -moz-box-shadow: -1px 0px 6px 0px rgba(0,0,0,0.15);
+
+  &:hover::after {
+    content: attr(data-time);
+    position: absolute;
+    font-size: 13px;
+    color: #807a91;
+    bottom: 0;
+    right: -40px;
+    animation-duration: 500ms;
+    animation-name: time_animation_right;
+  }
 
   &__me {
     background: #5b4696;
     align-self: flex-end;
+    &:hover::after {
+      left: -40px;
+      animation-duration: 500ms;
+      animation-name: time_animation_left;
+    }
+  }
+}
+
+@keyframes time_animation_right {
+  from {
+    right: -35px;
+    opacity: 0;
   }
 
-  &:hover &::after {
-    content: attr(time);
+  to {
+    right: -40px;
+    opacity: 1;
+  }
+}
+
+@keyframes time_animation_left {
+  from {
+    left: -35px;
+    opacity: 0;
+  }
+
+  to {
+    left: -40px;
+    opacity: 1;
   }
 }

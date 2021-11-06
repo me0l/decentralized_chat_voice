@@ -1,0 +1,30 @@
+.chat__header {
+  height: 50px;
+  padding: 10px;
+  background-color: #221a39;
+  display: flex;
+  gap: 5px;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  font-size: 13px;
+}
+
+.user_info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  &__status {
+    color: #807a91;
+  }
+
+  &__avatar {
+    width: 45px;
+    height: 45px;
+  }
+}
+
+.user_actions {
+
+}

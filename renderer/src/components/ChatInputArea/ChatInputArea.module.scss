@@ -2,28 +2,35 @@
   display: flex;
   gap: 10px;
   width: 100%;
-  position: relative;
   justify-content: center;
-  background-color: #2a223e;
-
-  //& * {
-  //  width: 25%;
-  //}
+  background-color: #221a39;
 
   & &__button {
     width: 25px;
     height: 25px;
+    color: #807a91;
+
+    & svg{
+      width: 25px;
+      height: 25px;
+    }
   }
 
   & &__input {
+    overflow-wrap: break-word;
+    word-break: break-all;
     color: white;
-    min-height: 10px;
+    min-height: 20px;
     max-height: 200px;
     width: 100%;
     float: left;
-    padding: 10px;
     overflow: auto;
     outline: 0;
+
+    &:empty:not(:focus):before {
+      color: #807a91;
+      content: attr(data-placeholder);
+    }
 
     &::-webkit-scrollbar {
       width: 0;

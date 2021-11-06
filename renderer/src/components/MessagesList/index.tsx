@@ -29,17 +29,16 @@ const MessagesListWithoutObserve = forwardRef<
   return (
     <OverlayScrollbarsComponent
       ref={ref}
+      options={{
+        overflowBehavior: {
+          x: "hidden",
+        },
+      }}
       style={{ height: "100%", padding: "10px" }}
     >
       <div className={classes.messages_list}>
         {messages.map((message, index) => {
-          return (
-            <Message
-              key={message.id}
-              peerId={message.peerId}
-              text={message.text}
-            />
-          );
+          return <Message key={message.id} message={message} />;
         })}
       </div>
     </OverlayScrollbarsComponent>

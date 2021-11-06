@@ -1,14 +1,21 @@
 import { SnapshotIn, types, Instance } from "mobx-state-tree";
 import { v4 } from "uuid";
+import { IMessage } from "../types/message";
 
 export type MessagesStore = Instance<typeof MessagesStore>;
 export type Message = SnapshotIn<typeof Message>;
 
+export const User = types.model({
+  peerId: types.identifier,
+  nickname: types.maybeNull(types.string),
+  avatar: types.maybeNull(types.string),
+});
+
 export const Message = types.model({
   id: types.identifier,
   text: types.string,
-  peerId: types.string,
-  deleted: types.boolean,
+  from: User,
+  time: types.number,
 });
 
 export const MessagesStore = types
@@ -17,16 +24,16 @@ export const MessagesStore = types
   })
   .views((self) => ({
     get filteredMessages() {
-      return self.messages.filter((message) => message.deleted);
+      return self.messages;
     },
   }))
   .actions((self) => ({
-    addMessage(message: { text: string; peerId: string }) {
+    addMessage(message: IMessage) {
       self.messages.push({
         id: v4(),
         text: message.text,
-        peerId: message.peerId,
-        deleted: false,
+        from: message.from,
+        time: message.time,
       });
     },
   }));

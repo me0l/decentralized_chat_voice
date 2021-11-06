@@ -1,19 +1,17 @@
 import React, { useState, KeyboardEvent } from "react";
 import { observer } from "mobx-react";
+import { compile } from "html-to-text";
 
 import ContentEditable from "react-contenteditable";
+import { IoSend } from "react-icons/io5";
 
 import classes from "./ChatInputArea.module.scss";
 import { MessagesStore } from "../../stores/MessagesStore";
-
-interface Message {
-  text: string;
-  peerId: string;
-}
+import { IMessage } from "../../types/message";
 
 interface ChatInputAreaProps {
   store: MessagesStore;
-  onMessage?: (ev: { message: Message }) => void;
+  onMessage?: (ev: { message: IMessage }) => void;
 }
 
 function ChatInputAreaWithoutObserve(props: ChatInputAreaProps) {
@@ -21,26 +19,31 @@ function ChatInputAreaWithoutObserve(props: ChatInputAreaProps) {
 
   const { addMessage } = props.store;
 
-  const sendMessage = (message: Message) => {
-    if (message.text !== "") {
-      addMessage(message);
-      if (props.onMessage) setTimeout(() => props.onMessage({ message }), 100);
+  const htmlToText = (html: string) => {
+    const compiler = compile();
+    return compiler(html);
+  };
+
+  const sendMessage = ({ text, ...message }: IMessage) => {
+    if (text !== "") {
+      const payload = { text: htmlToText(text).trim(), ...message };
+      addMessage(payload);
+      if (props.onMessage)
+        setTimeout(() => props.onMessage({ message: payload }), 100);
       setValue("");
     }
   };
 
   const onKeyPress = (event: KeyboardEvent) => {
     if (event.key === "Enter" && !event.shiftKey) {
-      const text = (event.target as unknown as any).innerHTML.replaceAll(
-        "<br>",
-        "\n"
-      );
+      const text = (event.target as unknown as any).innerHTML;
       event.preventDefault();
       event.stopPropagation();
 
       sendMessage({
-        text,
-        peerId: Math.random() > 0.5 ? "12049120421" : "",
+        text: text,
+        from: { peerId: Math.random() > 0.5 ? "12049120421" : "" },
+        time: Date.now(),
       });
 
       return false;
@@ -49,24 +52,46 @@ function ChatInputAreaWithoutObserve(props: ChatInputAreaProps) {
 
   return (
     <div className={classes.chat_input_area}>
-      <ContentEditable
-        html={value}
-        className={classes.chat_input_area__input}
-        onKeyPress={onKeyPress}
-        onChange={(ev) => setValue((ev.target as unknown as any).value)}
-      />
+      <div
+        style={{
+          padding: "10px",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <ContentEditable
+          html={value}
+          data-placeholder="Введите сообщение..."
+          className={classes.chat_input_area__input}
+          onKeyPress={onKeyPress}
+          onChange={(ev) => setValue((ev.target as unknown as any).value)}
+        />
+      </div>
 
-      <div>
-        <button
-          onClick={() =>
-            sendMessage({
-              text: value,
-              peerId: Math.random() > 0.5 ? "12049120421" : "",
-            })
-          }
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "50px",
+          height: "50px",
+        }}
+      >
+        <a
+          className={classes.chat_input_area__button}
+          onClick={(ev) => {
+            ev.preventDefault();
+            return sendMessage({
+              text: htmlToText(value),
+              from: { peerId: Math.random() > 0.5 ? "12049120421" : "" },
+              time: Date.now(),
+            });
+          }}
+          href="#"
         >
-          Отправить
-        </button>
+          <IoSend />
+        </a>
       </div>
     </div>
   );

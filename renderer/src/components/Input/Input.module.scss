@@ -1,0 +1,20 @@
+.input__container {
+  padding: 10px;
+  background-color: #2b2147;
+  border-radius: 10px;
+  display: flex;
+  font-size: 13px;
+
+  & .input {
+    outline: 0;
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 12em;
+
+    &:empty:not(:focus):before {
+      color: #807a91;
+      content: attr(data-placeholder);
+    }
+  }
+}
